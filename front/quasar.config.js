@@ -97,8 +97,8 @@ module.exports = configure(function (/* ctx */) {
     framework: {
       config: {
         brand: {
-          primary: "#8a2be2",
-          secondary: "#3013eb",
+          primary: "#3013eb",
+          secondary: "#1976d2",
           accent: "#9C27B0",
 
           dark: "#1d1d1d",
@@ -108,6 +108,10 @@ module.exports = configure(function (/* ctx */) {
           info: "#31CCEC",
           warning: "#F2C037",
         },
+
+        notify: {
+          position: 'top'
+        }
       },
 
       iconSet: "fontawesome-v6", // Quasar icon set
@@ -121,7 +125,9 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: [
+        "Notify"
+      ],
     },
 
     // animations: 'all', // --- includes all animations

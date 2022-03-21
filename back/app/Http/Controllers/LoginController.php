@@ -22,9 +22,7 @@ class LoginController extends Controller
             return response()->json(['token' => $token]);
         }
 
-        return ValidationException::withMessages([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return response()->json(['errors' => 'Login ou Senha incorreto!'], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function logout(Request $request)

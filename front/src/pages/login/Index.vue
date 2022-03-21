@@ -15,12 +15,38 @@
         </q-card-section>
         <q-card-section>
           <div>
-            <q-input v-model="user.email" type="email" label="Email" />
-            <q-input v-model="user.password" type="password" label="Senha" />
+            <q-input
+              v-model="user.email"
+              label="Email"
+              :error="!!errors.email"
+              bottom-slots
+            >
+              <template v-slot:error>
+                {{ errors?.email }}
+              </template>
+            </q-input>
+
+            <q-input
+              v-model="user.password"
+              :error="!!errors.password"
+              bottom-slots
+              type="password"
+              label="Senha"
+            >
+              <template v-slot:error>
+                {{ errors?.password }}
+              </template>
+            </q-input>
           </div>
         </q-card-section>
         <q-card-actions class="row justify-center">
-          <q-btn color="primary" label="Entrar" size="md" />
+          <q-btn
+            color="primary"
+            label="Entrar"
+            size="md"
+            @click="login"
+            :loading="loading"
+          />
         </q-card-actions>
       </q-card>
     </div>
@@ -28,14 +54,50 @@
 </template>
 
 <script>
-import { reactive } from "@vue/reactivity";
+import { reactive, ref } from "@vue/reactivity";
 import Logotype from "../../components/Logotype.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+
 export default {
-  setup(props) {
-    const user = reactive({});
-    return { user };
-  },
   components: { Logotype },
+
+  setup(props) {
+    const user = ref({
+      email: "danilovsdanilo@gmail.",
+      password: "danilo123",
+    });
+
+    const errors = reactive({});
+    const loading = ref(false);
+
+    const store = useStore();
+    const router = useRouter();
+
+    const $q = useQuasar();
+
+    async function login() {
+      loading.value = true;
+      try {
+        await store.dispatch("login/login", user.value);
+
+        router.push({ name: "home" });
+      } catch (error) {
+        $q.notify({
+          message: error.message,
+          color: "negative",
+        });
+
+        errors.email = error.errors?.email[0] ?? "";
+        errors.password = error.errors?.password[0] ?? "";
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    return { user, login, errors, loading };
+  },
 };
 </script>
 
