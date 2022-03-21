@@ -24,6 +24,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [LoginController::class, 'authenticate'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 
-Route::apiResource('products', ProductController::class)->middleware('auth:sanctum');
+Route::apiResource('products', ProductController::class)->only('index');
 
 Route::apiResource('orders', OrderController::class)->middleware('auth:sanctum');

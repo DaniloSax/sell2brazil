@@ -90,7 +90,6 @@ export default {
         });
 
         errors.value = prepareErrors(error.errors);
-        console.log(errors);
       } finally {
         loading.value = false;
       }
@@ -105,8 +104,6 @@ export default {
       if (errors.password) {
         obj.password = errors.password[0];
       }
-
-      console.log("prepareErrors", obj);
 
       return obj;
     }

@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 
 // import example from './module-example'
 import login from './login'
+import product from './product'
 
 /*
  * If not building with SSR mode, you can
@@ -16,7 +17,8 @@ import login from './login'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      login
+      login,
+      product
     },
 
     // enable strict mode (adds overhead!)
