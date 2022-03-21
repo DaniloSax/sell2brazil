@@ -69,7 +69,7 @@ export default {
       password: "danilo123",
     });
 
-    const errors = reactive({});
+    const errors = ref({});
     const loading = ref(false);
 
     const store = useStore();
@@ -89,11 +89,26 @@ export default {
           color: "negative",
         });
 
-        errors.email = error.errors?.email[0] ?? "";
-        errors.password = error.errors?.password[0] ?? "";
+        errors.value = prepareErrors(error.errors);
+        console.log(errors);
       } finally {
         loading.value = false;
       }
+    }
+
+    function prepareErrors(errors) {
+      let obj = {};
+
+      if (errors.email) {
+        obj.email = errors.email[0];
+      }
+      if (errors.password) {
+        obj.password = errors.password[0];
+      }
+
+      console.log("prepareErrors", obj);
+
+      return obj;
     }
 
     return { user, login, errors, loading };
