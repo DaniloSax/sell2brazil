@@ -1,7 +1,9 @@
 <template>
   <q-page padding>
+    <div class="text-overline">PRODUTOS IMPERDÍVEIS</div>
+    <q-separator class="q-mb-lg" />
+
     <q-table
-      title="Produtos"
       :rows="rows"
       :columns="columns"
       :rows-per-page-options="rowsPerPageOptions"
@@ -12,8 +14,6 @@
           class="q-pa-xs col-xs-12 col-sm-6 col-md-5 col-lg-3"
           :key="rowIndex"
         >
-          <!-- :style="[$q.platform.is.desktop ? 'height: 70vh' : '']" -->
-
           <q-card
             @mouseenter="hover = rowIndex"
             @mouseleave="hover = null"
