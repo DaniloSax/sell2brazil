@@ -29,7 +29,19 @@ class DatabaseSeeder extends Seeder
         $products = Product::factory()->state([
             'created_by' => $user->id,
             'updated_by' => $user->id
-        ])->has(Image::factory(3), 'images')->count(5)->create();
+        ])->count(20)
+            ->create();
+
+        foreach ($products as $prod) {
+
+            $prod = collect(Product::PRODUCTS_FACTORY)->where('article_code', $prod->article_code)->first();
+
+            $prod->images()->create([
+                'file_name' => strtolower($prod['name']) . '.jpeg',
+                'path' => $prod['image'],
+                'size' => rand(10, 50)
+            ]);
+        }
 
         Order::factory()
             ->count(3)

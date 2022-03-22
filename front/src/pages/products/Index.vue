@@ -7,15 +7,53 @@
       :rows-per-page-options="rowsPerPageOptions"
       grid
     >
-      <template v-slot:item="{ row }">
-        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-          <q-card class="my-card">
+      <template v-slot:item="{ row, rowIndex }">
+        <div
+          class="q-pa-xs col-xs-12 col-sm-6 col-md-5 col-lg-3"
+          :key="rowIndex"
+        >
+          <!-- :style="[$q.platform.is.desktop ? 'height: 70vh' : '']" -->
+
+          <q-card
+            @mouseenter="hover = rowIndex"
+            @mouseleave="hover = null"
+            class="fit"
+            :class="[hover === rowIndex ? 'shadow-transition shadow-10 ' : '']"
+          >
+            <span class="q-ma-sm text-overline">COD-{{ row.articleCode }}</span>
+
             <q-card-section>
-              {{ row }}
+              <div class="flex flex-center">
+                <img :src="row.image" alt="imagem produto" height="135" />
+              </div>
             </q-card-section>
-            <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
-            </q-card-section>
+
+            <q-responsive :ratio="16 / 9">
+              <q-card-section>
+                <p class="text-h6">
+                  {{ row.articleName }}
+                </p>
+
+                <p>
+                  {{ unitPriceBR(row.unitPrice) }}
+                </p>
+
+                <p class="text-subtitle2">
+                  {{ row.articleDescription }}
+                </p>
+
+                <p>Quantidade: {{ row.quantity }}</p>
+              </q-card-section>
+            </q-responsive>
+
+            <q-card-actions class="items-center justify-between">
+              <q-btn
+                color="primary"
+                label="Adicionar ao carrinho"
+                style="width: 80%"
+              />
+              <q-btn flat round icon="favorite_border" />
+            </q-card-actions>
           </q-card>
         </div>
       </template>
@@ -68,6 +106,7 @@ export default {
       rowsPerPage: getItemsPerPage(),
     });
     const rows = ref([]);
+    const hover = ref(0);
 
     onMounted(() => productsIndex());
 
@@ -89,6 +128,13 @@ export default {
       return 9;
     }
 
+    function unitPriceBR(unitPrice) {
+      return Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(unitPrice);
+    }
+
     watch(
       () => $q.screen.name,
       () => {
@@ -97,13 +143,23 @@ export default {
     );
 
     const rowsPerPageOptions = computed(() => {
-      return $q.screen.gt.xs ? ($q.screen.gt.sm ? [3, 6, 9] : [3, 6]) : [3];
+      return $q.screen.gt.xs ? ($q.screen.gt.sm ? [4, 6, 9] : [3, 6]) : [3];
     });
 
-    return { columns, rows, pagination, rowsPerPageOptions };
+    return {
+      columns,
+      rows,
+      pagination,
+      rowsPerPageOptions,
+      hover,
+      unitPriceBR,
+    };
   },
 };
 </script>
 
 <style>
+.altura {
+  max-height: 16vh;
+}
 </style>

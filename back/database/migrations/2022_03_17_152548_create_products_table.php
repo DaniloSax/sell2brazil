@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('article_code');
             $table->string('article_name');
+            $table->text('article_description');
             $table->float('unit_price');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

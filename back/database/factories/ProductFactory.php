@@ -25,6 +25,7 @@ class ProductFactory extends Factory
         return [
             'article_code' => $product['article_code'],
             'article_name' => $product['name'],
+            'article_description' => $product['article_description'],
             'unit_price' => $product['price'],
         ];
     }

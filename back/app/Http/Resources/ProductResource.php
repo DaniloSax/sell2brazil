@@ -20,6 +20,8 @@ class ProductResource extends JsonResource
         return [
             'articleCode' => $this->article_code,
             'articleName' => $this->article_name,
+            'articleDescription' => $this->article_description,
+            'image' => $this->images->first()->path,
             'unitPrice' => $this->unit_price,
             'quantity' => $quantity,
         ];

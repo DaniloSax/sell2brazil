@@ -20,11 +20,10 @@ class ImageFactory extends Factory
         // $filePrefixNames = [...Product::PRODUCTS_FACTORY];
         $index = rand(0, count(Product::PRODUCTS_FACTORY) - 1);
         $product = Product::PRODUCTS_FACTORY[$index];
-        $fileName = $product['name'] . '.' . $this->faker->fileExtension();
 
         return [
-            'file_name' => $fileName,
-            'path' => 'storage/' . $fileName,
+            'file_name' => strtolower($product['name']) . '.jpeg',
+            'path' => $product['image'],
             'size' => $this->faker->randomNumber(3)
         ];
     }
