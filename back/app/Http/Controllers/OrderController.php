@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,7 @@ class OrderController extends Controller
         $order = Order::create([
             'order_date' => date('Y-m-d'),
             'total_amount_wihtout_discount' => $request->unitPrice * $request->quantity,
-            'total_amount_with_discount' => $this->applyDiscount($request->unitPrice, $request->quantity)
+            'total_amount_with_discount' => OrderService::applyDiscount($request->unitPrice, $request->quantity)
         ]);
 
         $products = Product::where('article_code', $request->articleCode)->limit($request->quantity)->get();

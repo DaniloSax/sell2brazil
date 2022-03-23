@@ -49,7 +49,7 @@
             hover === index ? 'shadow-transition shadow-10 ' : 'shadow-0',
           ]"
         >
-          <div class="row q-pa-sm text-uppercase">
+          <div class="row q-pa-sm">
             <img
               :src="product.image"
               alt="imagem produto"
@@ -66,7 +66,12 @@
               </div>
             </div>
 
-            <div class="column col">
+            <q-separator v-if="$q.platform.is.desktop" spaced inset vertical />
+
+            <div
+              class="column items-center col text-uppercase"
+              :class="{ 'q-ml-sm justify-center': $q.platform.is.desktop }"
+            >
               <div class="text-subtitle2 text-primary">
                 Preço Unitário: {{ $filters.priceBR(product.unitPrice) }}
               </div>
