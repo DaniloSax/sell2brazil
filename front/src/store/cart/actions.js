@@ -9,14 +9,17 @@ export async function index({ commit }) {
   const { data } = await api.get('orders')
 
   commit('INIT_STATE', data.orders)
-
-  console.log('orders', data)
 }
 
-export async function addCart({ commit, state }, product) {
+export async function addCart({ commit, state, dispatch }, product) {
 
-  // const order = state.orders.find(order => !order.finished)
-  // const prod = { product, order_id: order?.order_id || null }
+  console.log('carregando orders',state.orders)
+  if (!state.orders.length) {
+    console.log('carregando orders')
+    await dispatch('index')
+  }
+
   const { data } = await api.post('orders', product)
+  commit('ADD_CART', product)
   console.log('action addCard', data)
 }

@@ -21,7 +21,10 @@
             color="primary"
             icon="shopping_cart"
             :to="{ name: 'cart' }"
-          />
+          >
+            <q-badge color="red" floating>{{ order?.products?.length }}</q-badge>
+          </q-btn>
+
           <q-btn flat color="primary" label="Entrar" :to="{ name: 'login' }" />
         </span>
       </q-toolbar>
@@ -46,15 +49,25 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import Logotype from "src/components/Logotype.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "MainLayout",
   setup() {
     const search = ref("");
+    const store = useStore();
+
+    onMounted(() => {
+      setTimeout(async () => await store.dispatch("cart/index"), 1000);
+    });
+
+    const order = computed(() => store.getters["cart/getOrder"]);
+
     return {
       search,
+      order,
     };
   },
 
