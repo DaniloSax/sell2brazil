@@ -1,88 +1,99 @@
 <template>
   <q-page padding>
     <div class="text-overline text-uppercase">Carrinho de compras</div>
+
     <q-separator class="q-mb-lg" />
 
-    <div class="q-gutter-sm">
-      <div class="text-h5">{{ orders.length }} Produtos no carrinho</div>
+    <div class="text-h5">{{ orders.length }} Compras pendentes</div>
 
-      <!-- orders -->
-      <q-card v-for="(order, index) in orders" :key="index" class="q-mb-xl">
-        <div
-          class="
-            q-ma-none
-            bg-secondary
-            text-white
-            row
-            justify-center
-            text-h6 text-uppercase
-          "
-        >
-          <span class="q-ma-sm">COD - {{ order.order_code }}</span>
-          <span class="q-ma-sm">Data: {{ order.order_date }}</span>
-          <span class="q-ma-sm">
-            Total sem Desconto:
+    <!-- orders -->
+    <q-card
+      flat
+      bordered
+      v-for="(order, index) in orders"
+      :key="index"
+      class="q-mb-lg"
+    >
+      <q-item class="bg-secondary text-white">
+        <q-item-section>
+          <q-item-label> COD - {{ order.order_code }} </q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label> Data: {{ order.order_date }} </q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
+            TOTAL SEM DESCONTO:
             {{ $filters.priceBR(order.total_amount_wihtout_discount) }}
-          </span>
+          </q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
+            <q-btn color="primary" label="Finalizar compra" />
+          </q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <!-- products -->
+      <q-card-section>
+        <div
+          v-for="(product, index) in order.products"
+          :key="index"
+          @mouseenter="hover = index"
+          @mouseleave="hover = null"
+          class="q-my-sm"
+          :class="[
+            hover === index ? 'shadow-transition shadow-10 ' : 'shadow-0',
+          ]"
+        >
+          <div class="row q-pa-sm text-uppercase">
+            <img
+              :src="product.image"
+              alt="imagem produto"
+              height="100"
+              class="q-pa-md"
+            />
+
+            <div class="column col-md-8">
+              <div class="text-h6">
+                {{ product.articleName }}
+              </div>
+              <div class="text-subtitle2">
+                {{ product.articleDescription }}
+              </div>
+            </div>
+
+            <div class="column col">
+              <div class="text-subtitle2 text-primary">
+                Preço Unitário: {{ $filters.priceBR(product.unitPrice) }}
+              </div>
+              <div class="text-subtitle2">
+                Quantidade: {{ product.quantity }}
+              </div>
+              <div class="text-subtitle2 text-positive">
+                total:
+                {{ $filters.priceBR(product.quantity * product.unitPrice) }}
+              </div>
+            </div>
+          </div>
+
+          <q-card-actions align="center">
+            <q-btn
+              flat
+              size="sm"
+              color="negative"
+              icon="close"
+              label="Remover"
+            />
+          </q-card-actions>
+
+          <q-separator spaced inset />
         </div>
-
-        <q-card-section class="q-gutter-sm">
-          <!-- produtos -->
-          <q-card
-            v-for="(product, index) in order.products"
-            :key="index"
-            @mouseenter="hover = index"
-            @mouseleave="hover = null"
-            class="q-my-sm"
-            :class="[
-              hover === index ? 'shadow-transition shadow-10 ' : 'shadow-0',
-            ]"
-          >
-            <q-card-section horizontal>
-              <img
-                :src="product.image"
-                alt="imagem produto"
-                height="100"
-                class="q-pa-md"
-              />
-
-              <div class="column col-md-8 col-sm-5 q-pa-md">
-                <div class="text-h6">
-                  {{ product.articleName }}
-                </div>
-                <div class="text-subtitle2">
-                  {{ product.articleDescription }}
-                </div>
-              </div>
-
-              <div class="col q-pa-md col-md-4 col-sm-5">
-                <div class="text-subtitle2 text-primary">
-                  Preço Unitário: {{ $filters.priceBR(product.unitPrice) }}
-                </div>
-                <div class="text-subtitle2">
-                  Quantidade: {{ product.quantity }}
-                </div>
-                <div class="text-subtitle2 text-positive text-uppercase">
-                  total:
-                  {{ $filters.priceBR(product.quantity * product.unitPrice) }}
-                </div>
-              </div>
-            </q-card-section>
-
-            <q-card-actions class="row justify-end">
-              <q-btn
-                flat
-                size="sm"
-                color="negative"
-                icon="close"
-                label="Remover"
-              />
-            </q-card-actions>
-            <q-separator spaced inset />
-          </q-card>
-        </q-card-section>
-      </q-card>
-    </div>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
