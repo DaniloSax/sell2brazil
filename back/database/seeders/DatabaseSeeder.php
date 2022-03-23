@@ -34,11 +34,11 @@ class DatabaseSeeder extends Seeder
 
         foreach ($products as $prod) {
 
-            $prod = collect(Product::PRODUCTS_FACTORY)->where('article_code', $prod->article_code)->first();
+            $factoryProd = collect(Product::PRODUCTS_FACTORY)->where('article_code', $prod->article_code)->first();
 
             $prod->images()->create([
-                'file_name' => strtolower($prod['name']) . '.jpeg',
-                'path' => $prod['image'],
+                'file_name' => strtolower($factoryProd['name']) . '.jpeg',
+                'path' => $factoryProd['image'],
                 'size' => rand(10, 50)
             ]);
         }

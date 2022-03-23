@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class OrderResource extends JsonResource
 {
@@ -16,11 +17,14 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'order_id' => $this->article_code,
-            'order_code' => $this->article_name,
-            'order_date' => $this->unit_price,
-            'total_amount_wihtout_discount' => Product::all()->filter(fn ($product) => $product->article_code === $product->article_code),
-            'total_amount_with_discount' => $this->unit_price
+            'order_id' => $this->order_id,
+            'order_code' => $this->order_code,
+            'order_date' => $this->order_date,
+            'total_amount_wihtout_discount' => $this->products()->where('user_id', Auth::id())
+                ->get()
+                ->reduce(fn ($acum, $item) => $acum += $item->unit_price),
+            'total_amount_with_discount' => null,
+            'products' => ProductResource::collection($this->products->unique('article_code'))
 
         ];
     }

@@ -31,7 +31,7 @@
       <router-view />
     </q-page-container>
 
-    <q-footer reveal bordered class="row text-center bg-secondary text-white">
+    <!-- <q-footer reveal bordered class="row text-center bg-secondary text-white">
       <div class="q-pa-md col-xs-12 col-sm-6 col-md-5 col-lg-3 text-justify">
         A Popconvert é um software que busca inovar a captação de leads, criando
         uma base de inscritos fresca e qualificada, para aumentar a taxa de
@@ -41,7 +41,7 @@
         <div class="text-h6 text-uppercase">redes sociais</div>
         <div>test</div>
       </div>
-    </q-footer>
+    </q-footer> -->
   </q-layout>
 </template>
 

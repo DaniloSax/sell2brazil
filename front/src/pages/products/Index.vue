@@ -7,11 +7,12 @@
       :rows="rows"
       :columns="columns"
       :rows-per-page-options="rowsPerPageOptions"
+      :loading="loading"
       grid
     >
       <template v-slot:item="{ row, rowIndex }">
         <div
-          class="q-pa-xs col-xs-12 col-sm-6 col-md-5 col-lg-3"
+          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3"
           :key="rowIndex"
         >
           <q-card
@@ -35,7 +36,7 @@
                 </p>
 
                 <p>
-                  {{ unitPriceBR(row.unitPrice) }}
+                  {{ $filters.priceBR(row.unitPrice) }}
                 </p>
 
                 <p class="text-subtitle2">
@@ -107,8 +108,13 @@ export default {
     });
     const rows = ref([]);
     const hover = ref(0);
+    const loading = ref(true);
 
-    onMounted(() => productsIndex());
+    onMounted(async () => {
+      await productsIndex();
+
+      loading.value = false;
+    });
 
     async function productsIndex() {
       const { products } = await store.dispatch("product/index");
@@ -128,13 +134,6 @@ export default {
       return 9;
     }
 
-    function unitPriceBR(unitPrice) {
-      return Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(unitPrice);
-    }
-
     watch(
       () => $q.screen.name,
       () => {
@@ -152,7 +151,7 @@ export default {
       pagination,
       rowsPerPageOptions,
       hover,
-      unitPriceBR,
+      loading,
     };
   },
 };

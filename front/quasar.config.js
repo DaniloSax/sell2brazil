@@ -28,7 +28,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["i18n", "axios"],
+    boot: ["i18n", "axios", "filter"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.css"],
@@ -110,8 +110,8 @@ module.exports = configure(function (/* ctx */) {
         },
 
         notify: {
-          position: 'top'
-        }
+          position: "top",
+        },
       },
 
       iconSet: "fontawesome-v6", // Quasar icon set
@@ -125,9 +125,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [
-        "Notify"
-      ],
+      plugins: ["Notify"],
     },
 
     // animations: 'all', // --- includes all animations

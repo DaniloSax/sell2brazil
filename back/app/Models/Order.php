@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Blameable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,12 +25,12 @@ class Order extends Model
         'total_amount_with_discount'
     ];
 
-    // protected function orderCode(): Attribute
-    // {
-    //     return Attribute::make(
-    //         set: fn ($value) => date('Y-m') . "-{$this->attributes['id']}"
-    //     );
-    // }
+    protected function order_date(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::create($value)->format('d/m/Y')
+        );
+    }
 
     public function products()
     {

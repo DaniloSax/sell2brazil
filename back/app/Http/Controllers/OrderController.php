@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -17,7 +18,15 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        if (Auth::check()) {
+            $orders = Order::whereHas('products', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->get();
+
+            return response()->json(['orders' => OrderResource::collection($orders)], Response::HTTP_OK);
+        }
+
+        return response(null, Response::HTTP_UNAUTHORIZED);
     }
 
     /**

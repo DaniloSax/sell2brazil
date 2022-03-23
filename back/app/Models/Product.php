@@ -38,9 +38,4 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class, 'orders_products', 'product_id', 'order_id')->withPivot(['user_id']);
     }
-
-    // private function generateoArticleCode()
-    // {
-    //     return $code = Keygen::numeric(6)->prefix(mt_rand(1, 9))->generate(true);
-    // }
 }
