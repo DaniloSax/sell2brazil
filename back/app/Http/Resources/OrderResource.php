@@ -27,8 +27,8 @@ class OrderResource extends JsonResource
             'order_date' => $this->order_date,
             'total_amount_wihtout_discount' => $total_amount_wihtout_discount,
             'total_amount_with_discount' => $this->total_amount_with_discount,
-            'products' => ProductResource::collection($this->products->unique('article_code'))
-
+            'finished' => $this->finished,
+            'products' => ProductResource::collection($this->products->unique('article_code')),
         ];
     }
 }

@@ -21,7 +21,8 @@ class OrderFactory extends Factory
             // 'order_code' => ,
             'order_date' => $this->faker->date('Y-m-d'),
             'total_amount_wihtout_discount' => $this->faker->randomFloat(2, 100, 500),
-            'total_amount_with_discount' => $this->faker->randomFloat(2, 10, 150)
+            'total_amount_with_discount' => $this->faker->randomFloat(2, 10, 150),
+            'finished' => (bool) rand(0, 1),
         ];
     }
 }

@@ -32,7 +32,11 @@
 
         <q-item-section>
           <q-item-label>
-            <q-btn color="primary" label="Finalizar compra" />
+            <q-btn
+              :color="order.finished ? 'warning' : 'primary'"
+              :label="order.finished ? 'compa finalizada' : 'Finalizar compra'"
+              :disabled="order.finished ? true : false"
+            />
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -76,11 +80,11 @@
                 Preço Unitário: {{ $filters.priceBR(product.unitPrice) }}
               </div>
               <div class="text-subtitle2">
-                Quantidade: {{ product.quantity }}
+                Quantidade: {{ product.quantityBought }}
               </div>
               <div class="text-subtitle2 text-positive">
                 total:
-                {{ $filters.priceBR(product.quantity * product.unitPrice) }}
+                {{ $filters.priceBR(product.quantityBought * product.unitPrice) }}
               </div>
             </div>
           </div>

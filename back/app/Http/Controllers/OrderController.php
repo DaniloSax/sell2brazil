@@ -9,6 +9,7 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -22,7 +23,10 @@ class OrderController extends Controller
         if (Auth::check()) {
             $orders = Order::whereHas('products', function ($query) {
                 $query->where('user_id', Auth::id());
-            })->get();
+            })
+                ->orderBy('finished')
+                ->latest()
+                ->get();
 
             return response()->json(['orders' => OrderResource::collection($orders)], Response::HTTP_OK);
         }
@@ -38,32 +42,23 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = Order::create([
-            'order_date' => date('Y-m-d'),
-            'total_amount_wihtout_discount' => $request->unitPrice * $request->quantity,
-            'total_amount_with_discount' => OrderService::applyDiscount($request->unitPrice, $request->quantity)
-        ]);
+        $quatity = (float) $request->quantity;
+        $unitPrice = (float) $request->unitPrice;
 
-        $products = Product::where('article_code', $request->articleCode)->limit($request->quantity)->get();
+        $order = Order::firstOrNew(
+            [
+                'finished' => false
+            ],
+            [
+                'order_date' => date('Y-m-d'),
+                'total_amount_wihtout_discount' => $unitPrice * $quatity,
+                'total_amount_with_discount' => OrderService::applyDiscount($unitPrice, $quatity)
+            ]
+        );
 
-        $order->products()->attach($products->pluck('id'), ['user_id' => Auth::id()]);
+        $order->products()->attach($request->id, ['user_id' => Auth::id()]);
 
         return response()->json($order, Response::HTTP_OK);
-    }
-
-    private function applyDiscount(float $unitPrice, int $quantity): float
-    {
-        $totalPrice = $unitPrice * $quantity;
-        $conditional = $quantity >= 5 && $quantity <= 9;
-
-        $valueDiscount = ($totalPrice * Order::PERCENTUAL_DISCOUNT) / 100;
-
-        if ($conditional && $totalPrice > 500) {
-
-            return $totalPrice - $valueDiscount;
-        }
-
-        return 0;
     }
 
     /**

@@ -52,6 +52,7 @@
                 color="primary"
                 label="Adicionar ao carrinho"
                 style="width: 80%"
+                @click="addCart(row)"
               />
               <q-btn flat round icon="favorite_border" />
             </q-card-actions>
@@ -113,6 +114,8 @@ export default {
     onMounted(async () => {
       await productsIndex();
 
+      await store.dispatch('cart/index')
+
       loading.value = false;
     });
 
@@ -121,7 +124,12 @@ export default {
 
       rows.value = products;
 
-      console.log("products component", products);
+      console.log("products", rows.value);
+    }
+
+    async function addCart(product) {
+      console.log(product);
+      await store.dispatch("cart/addCart", product);
     }
 
     function getItemsPerPage() {
@@ -152,6 +160,7 @@ export default {
       rowsPerPageOptions,
       hover,
       loading,
+      addCart,
     };
   },
 };

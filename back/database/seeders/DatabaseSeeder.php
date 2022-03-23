@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
             ->hasAttached(
                 $products,
                 fn () => [
-                    'user_id' => User::all()->random()->first()->id
+                    'user_id' => User::all()->random()->first()->id,
                 ],
             )
             ->create();

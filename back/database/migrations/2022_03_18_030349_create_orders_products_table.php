@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('order_id');
             $table->foreignId('product_id');
-            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('order_id')->references('order_id')->on('orders')->cascadeOnUpdate()->cascadeOnDelete();

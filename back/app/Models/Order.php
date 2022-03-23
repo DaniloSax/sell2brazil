@@ -25,7 +25,7 @@ class Order extends Model
         'total_amount_with_discount'
     ];
 
-    protected function order_date(): Attribute
+    protected function orderDate(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => Carbon::create($value)->format('d/m/Y')
@@ -34,6 +34,8 @@ class Order extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id')->withPivot(['user_id']);
+        return $this->belongsToMany(Product::class, 'orders_products', 'order_id', 'product_id')
+            ->withPivot(['user_id'])
+            ->orderBy('article_name', 'asc');
     }
 }
