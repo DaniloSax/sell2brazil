@@ -45,14 +45,14 @@ class OrderController extends Controller
         $quatity = (float) $request->quantity;
         $unitPrice = (float) $request->unitPrice;
 
-        $order = Order::firstOrNew(
+        $order = Order::firstOrCreate(
             [
                 'finished' => false
             ],
             [
                 'order_date' => date('Y-m-d'),
                 'total_amount_wihtout_discount' => $unitPrice * $quatity,
-                'total_amount_with_discount' => OrderService::applyDiscount($unitPrice, $quatity)
+                'total_amount_with_discount' => OrderService::applyDiscount($unitPrice, $quatity),
             ]
         );
 
@@ -81,7 +81,10 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order->finished = true;
+        $order->save();
+
+        return response()->json(['order' => $order], Response::HTTP_OK);
     }
 
     /**
@@ -92,6 +95,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+
+        return response(null, Response::HTTP_OK);
     }
 }

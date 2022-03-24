@@ -34,8 +34,22 @@
           <q-item-label>
             <q-btn
               :color="order.finished ? 'warning' : 'primary'"
-              :label="order.finished ? 'compa finalizada' : 'Finalizar compra'"
+              :icon="order.finished ? 'check' : ''"
+              :label="order.finished ? 'compra finalizada' : 'Finalizar compra'"
               :disabled="order.finished ? true : false"
+              @click="finishedOrder(order)"
+            />
+          </q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
+            <q-btn
+              color="negative"
+              icon="close"
+              label="Cancelar"
+              :disabled="order.finished ? true : false"
+              @click="cancelCart(order)"
             />
           </q-item-label>
         </q-item-section>
@@ -84,7 +98,9 @@
               </div>
               <div class="text-subtitle2 text-positive">
                 total:
-                {{ $filters.priceBR(product.quantityBought * product.unitPrice) }}
+                {{
+                  $filters.priceBR(product.quantityBought * product.unitPrice)
+                }}
               </div>
             </div>
           </div>
@@ -107,23 +123,55 @@
 </template>
 
 <script>
+import { computed, onMounted, reactive, ref } from "@vue/runtime-core";
+import { useStore } from "vuex";
+import { useQuasar } from "quasar";
 import { api } from "src/boot/axios";
-import { onMounted, ref } from "@vue/runtime-core";
 
 export default {
   setup(props) {
-    const orders = ref([]);
     const hover = ref(null);
+    const store = useStore();
+    const orders = ref([]);
+    const loading = ref(false);
+    const $q = useQuasar();
 
     onMounted(async () => {
-      const { data } = await api.get("orders");
-
-      orders.value = data.orders;
-
-      console.log(orders.value);
+      loading.value = true;
+      orders.value = await (await api.get("orders")).data.orders;
+      loading.value = false;
     });
 
-    return { orders, hover };
+    async function initState() {
+      orders.value = await (await api.get("orders")).data.orders;
+    }
+
+    async function finishedOrder(order) {
+      $q.loading.show({
+        delay: 400, // ms
+      });
+
+      await store.dispatch("cart/finishedOrder", order);
+      await store.dispatch("cart/index");
+      order.finished = true;
+      $q.notify({ message: "Compra finalizada!", color: "positive" });
+      $q.loading.hide();
+    }
+
+    async function cancelCart(order) {
+      $q.loading.show({
+        delay: 400, // ms
+      });
+
+      await store.dispatch("cart/cancelCart", order);
+      await store.dispatch("cart/index");
+      orders.value.splice(orders.value.indexOf(order), 1);
+
+      $q.notify({ message: "Compra cancelada!", color: "positive" });
+      $q.loading.hide();
+    }
+
+    return { orders, hover, finishedOrder, loading, cancelCart };
   },
 };
 </script>

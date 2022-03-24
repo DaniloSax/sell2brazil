@@ -53,6 +53,7 @@
                 label="Adicionar ao carrinho"
                 style="width: 80%"
                 @click="addCart(row)"
+                :loading="row.loading"
               />
               <q-btn flat round icon="favorite_border" />
             </q-card-actions>
@@ -114,7 +115,7 @@ export default {
     onMounted(async () => {
       await productsIndex();
 
-      await store.dispatch('cart/index')
+      await store.dispatch("cart/index");
 
       loading.value = false;
     });
@@ -123,13 +124,12 @@ export default {
       const { products } = await store.dispatch("product/index");
 
       rows.value = products;
-
-      console.log("products", rows.value);
     }
 
     async function addCart(product) {
-      console.log(product);
+      product.loading = true;
       await store.dispatch("cart/addCart", product);
+      product.loading = false;
     }
 
     function getItemsPerPage() {

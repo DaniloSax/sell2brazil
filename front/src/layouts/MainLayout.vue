@@ -22,7 +22,7 @@
             icon="shopping_cart"
             :to="{ name: 'cart' }"
           >
-            <q-badge color="red" floating>{{ order?.products?.length }}</q-badge>
+            <q-badge color="red" floating>{{ totalProducts() }}</q-badge>
           </q-btn>
 
           <q-btn flat color="primary" label="Entrar" :to="{ name: 'login' }" />
@@ -65,9 +65,18 @@ export default defineComponent({
 
     const order = computed(() => store.getters["cart/getOrder"]);
 
+    function totalProducts() {
+      return (
+        order.value?.products
+          .map((p) => p.quantityBought)
+          .reduce((acum, item) => (acum += item)) || 0
+      );
+    }
+
     return {
       search,
       order,
+      totalProducts,
     };
   },
 

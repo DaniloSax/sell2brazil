@@ -10,9 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Blameable;
 
-    use Blameable;
 
     const PERCENTUAL_DISCOUNT = 15;
 
@@ -22,7 +21,8 @@ class Order extends Model
         'order_code',
         'order_date',
         'total_amount_wihtout_discount',
-        'total_amount_with_discount'
+        'total_amount_with_discount',
+        'finished',
     ];
 
     protected function orderDate(): Attribute
