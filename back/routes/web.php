@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ServerFakeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/**
+ * routes fakers solicitadas na descricao do teste
+ *
+ * https://localhost:9001/order
+ * https://localhost:9002/v1/order
+ * https://localhost:9003/web_api/order
+ */
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('order', [ServerFakeController::class, 'index']);
+    Route::get('v1/order', [ServerFakeController::class, 'index']);
+    Route::get('web_api/order', [ServerFakeController::class, 'index']);
 });

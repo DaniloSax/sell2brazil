@@ -1,6 +1,5 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
-import { useRouter } from 'vue-router';
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -9,6 +8,17 @@ import { useRouter } from 'vue-router';
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: 'http://localhost:8000/api/' })
+const api1 = axios.create({ baseURL: 'http://localhost:9001/' })
+const api2 = axios.create({ baseURL: 'http://localhost:9002/' })
+const api3 = axios.create({ baseURL: 'http://localhost:9003/' })
+
+// api1.interceptors.request.use(function (config) {
+//   config.headers['Access-Control-Allow-Origin'] = '*'
+// }, function (error) {
+
+//   return Promise.reject(error)
+
+// })
 
 api.interceptors.request.use(function (config) {
 
@@ -40,7 +50,6 @@ api.interceptors.response.use(function (response) {
 
     localStorage.removeItem(localStorage.key(0))
 
-    // window.location.href = "http://localhost:9000/login";
   }
 
   return error
@@ -58,4 +67,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 })
 
-export { api }
+export { api, api1, api2, api3 }

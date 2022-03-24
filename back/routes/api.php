@@ -4,6 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ServerFakeController;
 use Illuminate\Support\Facades\Route;
 
 /*
