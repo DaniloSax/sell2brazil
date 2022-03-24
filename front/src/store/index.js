@@ -4,6 +4,7 @@ import { createStore } from 'vuex'
 import login from './login'
 import product from './product'
 import cart from './cart'
+import auth from './auth'
 
 /*
  * If not building with SSR mode, you can
@@ -19,7 +20,8 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       login,
       product,
-      cart
+      cart,
+      auth
     },
 
     // enable strict mode (adds overhead!)

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'authenticate'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
+Route::get('auth', [LoginController::class, 'auth'])->middleware('auth:sanctum')->name('auth');
 
 Route::apiResource('products', ProductController::class)->only('index');
 

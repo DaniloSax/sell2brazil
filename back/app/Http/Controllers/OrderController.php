@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -83,6 +84,17 @@ class OrderController extends Controller
     {
         $order->finished = true;
         $order->save();
+
+        Purchase::create([
+            'order_code' => $order->order_code,
+            'order_date'=> $order->order_date,
+            'total_amount_wihtout_discount' => $order->total_amount_wihtout_discount,
+            'total_amount_with_discount'=> $order->total_amount_with_discount,
+            'finished'=> $order->finished,
+            'products' => $order->products
+        ]);
+
+        $order->delete();
 
         return response()->json(['order' => $order], Response::HTTP_OK);
     }

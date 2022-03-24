@@ -68,6 +68,7 @@
 import { computed, onMounted, ref, watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 
 const columns = [
   {
@@ -104,6 +105,7 @@ export default {
   setup(props) {
     const $q = useQuasar();
     const store = useStore();
+    const router = useRouter();
     const pagination = ref({
       page: 1,
       rowsPerPage: getItemsPerPage(),
@@ -111,11 +113,14 @@ export default {
     const rows = ref([]);
     const hover = ref(0);
     const loading = ref(true);
+    const auth = computed(() => store.getters["auth/auth"]);
 
     onMounted(async () => {
       await productsIndex();
 
-      await store.dispatch("cart/index");
+      if (auth.value) {
+        await store.dispatch("cart/index");
+      }
 
       loading.value = false;
     });
@@ -127,9 +132,13 @@ export default {
     }
 
     async function addCart(product) {
-      product.loading = true;
-      await store.dispatch("cart/addCart", product);
-      product.loading = false;
+      if (auth.value) {
+        product.loading = true;
+        await store.dispatch("cart/addCart", product);
+        product.loading = false;
+      } else {
+        router.push({ name: "login" });
+      }
     }
 
     function getItemsPerPage() {

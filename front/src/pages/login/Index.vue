@@ -65,7 +65,7 @@ export default {
 
   setup(props) {
     const user = ref({
-      email: "danilovsdanilo@gmail.",
+      email: "danilovsdanilo@gmail.com",
       password: "danilo123",
     });
 

@@ -11,7 +11,15 @@ const routes = [
       {
         path: "/cart",
         name: "cart",
+        meta: {
+          isAuthenticated: true
+        },
         component: () => import("pages/cart/Index.vue"),
+      },
+      {
+        path: "/my-requests",
+        name: "requests",
+        component: () => import("pages/my_requests/Index.vue"),
       },
     ],
   },

@@ -26,7 +26,13 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  // Router.beforeEach
+  Router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem(localStorage.key(0))
+
+    if (to.name !== 'login' && to.meta.isAuthenticated && !token) next({ name: 'login' })
+
+    next()
+  })
 
   return Router
 })

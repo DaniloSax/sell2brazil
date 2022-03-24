@@ -14,7 +14,7 @@
           />
         </q-toolbar-title>
 
-        <span class="text-dark row justify-start q-ml-md">
+        <span class="row justify-start text-dark q-ml-md">
           <q-btn
             flat
             round
@@ -25,7 +25,7 @@
             <q-badge color="red" floating>{{ totalProducts() }}</q-badge>
           </q-btn>
 
-          <q-btn flat color="primary" label="Entrar" :to="{ name: 'login' }" />
+          <BtnLogin />
         </span>
       </q-toolbar>
     </q-header>
@@ -52,15 +52,19 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import Logotype from "src/components/Logotype.vue";
 import { useStore } from "vuex";
+import BtnLogin from "../components/BtnLogin.vue";
 
 export default defineComponent({
   name: "MainLayout",
   setup() {
     const search = ref("");
     const store = useStore();
+    const auth = computed(() => store.getters["auth/auth"]);
 
-    onMounted(() => {
-      setTimeout(async () => await store.dispatch("cart/index"), 1000);
+    onMounted(async () => {
+      if (auth.value) {
+        await store.dispatch("cart/index");
+      }
     });
 
     const order = computed(() => store.getters["cart/getOrder"]);
@@ -80,7 +84,7 @@ export default defineComponent({
     };
   },
 
-  components: { Logotype },
+  components: { Logotype, BtnLogin },
 });
 </script>
 

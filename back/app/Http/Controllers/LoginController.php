@@ -31,4 +31,9 @@ class LoginController extends Controller
 
         return response()->json(null, Response::HTTP_OK);
     }
+
+    public function auth()
+    {
+        return response()->json(['auth' => Auth::user()], Response::HTTP_OK);
+    }
 }

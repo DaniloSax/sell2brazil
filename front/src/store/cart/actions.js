@@ -5,12 +5,19 @@ export function someAction (context) {
 
 import { api } from "src/boot/axios";
 
-export async function index({ commit }) {
-  const { data } = await api.get("orders");
+export async function index({ commit, getters }) {
+  const token = localStorage.getItem(localStorage.key(0))
 
-  commit("INIT_STATE", data.orders);
+  if (token) {
+    const { data } = await api.get("orders");
 
-  return data.orders;
+    commit("INIT_STATE", data.orders);
+
+    return data.orders;
+  }
+
+  return []
+
 }
 
 export async function addCart({ commit, getters, dispatch }, product) {
