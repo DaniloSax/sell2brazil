@@ -27,6 +27,7 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
+
     const token = localStorage.getItem(localStorage.key(0))
 
     if (to.name !== 'login' && to.meta.isAuthenticated && !token) next({ name: 'login' })
