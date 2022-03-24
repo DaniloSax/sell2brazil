@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
+import { useRouter } from 'vue-router';
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -33,6 +34,13 @@ api.interceptors.response.use(function (response) {
 
   if (error.response.status === 422) {
     return Promise.reject(error.response.data)
+  }
+
+  if (error.response.status === 405) {
+
+    localStorage.removeItem(localStorage.key(0))
+
+    // window.location.href = "http://localhost:9000/login";
   }
 
   return error

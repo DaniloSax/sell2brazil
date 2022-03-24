@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -10,6 +11,7 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -43,21 +45,21 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $quatity = (float) $request->quantity;
-        $unitPrice = (float) $request->unitPrice;
-
-        $order = Order::firstOrCreate(
-            [
-                'finished' => false
-            ],
-            [
-                'order_date' => date('Y-m-d'),
-                'total_amount_wihtout_discount' => $unitPrice * $quatity,
-                'total_amount_with_discount' => OrderService::applyDiscount($unitPrice, $quatity),
-            ]
-        );
+        $order = Order::firstOrCreate(['finished' => false], ['order_date' => date('Y-m-d')]);
 
         $order->products()->attach($request->id, ['user_id' => Auth::id()]);
+
+        $quatity = $order->products()->count();
+        $total_amount_wihtout_discount = $order->products->reduce(fn ($acum, $item) => $acum += $item->unit_price);
+
+        $order->total_amount_wihtout_discount = $total_amount_wihtout_discount;
+
+        $order->total_amount_with_discount = OrderService::applyDiscount(
+            $total_amount_wihtout_discount,
+            $quatity
+        );
+
+        $order->save();
 
         return response()->json($order, Response::HTTP_OK);
     }
@@ -87,16 +89,26 @@ class OrderController extends Controller
 
         Purchase::create([
             'order_code' => $order->order_code,
-            'order_date'=> $order->order_date,
+            'order_date' => $order->order_date,
             'total_amount_wihtout_discount' => $order->total_amount_wihtout_discount,
-            'total_amount_with_discount'=> $order->total_amount_with_discount,
-            'finished'=> $order->finished,
+            'total_amount_with_discount' => $order->total_amount_with_discount,
+            'finished' => $order->finished,
             'products' => $order->products
         ]);
 
         $order->delete();
 
         return response()->json(['order' => $order], Response::HTTP_OK);
+    }
+
+    public function detacheProduct(Product $product)
+    {
+
+        $id = DB::table('orders_products')->where('product_id', $product->id)->first()->id;
+
+        DB::table('orders_products')->where('id', $id)->delete();
+
+        return response(null, Response::HTTP_OK);
     }
 
     /**

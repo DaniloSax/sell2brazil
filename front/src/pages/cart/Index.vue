@@ -32,6 +32,13 @@
 
         <q-item-section>
           <q-item-label>
+            TOTAL COM DESCONTO:
+            {{ $filters.priceBR(order.total_amount_with_discount) }}
+          </q-item-label>
+        </q-item-section>
+
+        <q-item-section>
+          <q-item-label>
             <q-btn
               :color="order.finished ? 'warning' : 'primary'"
               :icon="order.finished ? 'check' : ''"
@@ -112,6 +119,7 @@
               color="negative"
               icon="close"
               label="Remover"
+              @click="detacheProduct(product, order)"
             />
           </q-card-actions>
 
@@ -123,7 +131,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, ref } from "@vue/runtime-core";
+import { onMounted, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { useQuasar } from "quasar";
 import { api } from "src/boot/axios";
@@ -139,16 +147,16 @@ export default {
     onMounted(async () => {
       loading.value = true;
       orders.value = await (await api.get("orders")).data.orders;
+      console.log(
+        "🚀 ~ file: Index.vue ~ line 143 ~ onMounted ~ orders.value ",
+        orders.value
+      );
       loading.value = false;
     });
 
-    async function initState() {
-      orders.value = await (await api.get("orders")).data.orders;
-    }
-
     async function finishedOrder(order) {
       $q.loading.show({
-        delay: 400, // ms
+        delay: 400,
       });
 
       await store.dispatch("cart/finishedOrder", order);
@@ -160,7 +168,7 @@ export default {
 
     async function cancelCart(order) {
       $q.loading.show({
-        delay: 400, // ms
+        delay: 400,
       });
 
       await store.dispatch("cart/cancelCart", order);
@@ -171,7 +179,20 @@ export default {
       $q.loading.hide();
     }
 
-    return { orders, hover, finishedOrder, loading, cancelCart };
+    async function detacheProduct(product) {
+      await api.post(`detache-product/${product.id}`);
+      orders.value = await (await api.get("orders")).data.orders;
+      await store.dispatch("cart/index");
+    }
+
+    return {
+      orders,
+      hover,
+      finishedOrder,
+      loading,
+      cancelCart,
+      detacheProduct,
+    };
   },
 };
 </script>

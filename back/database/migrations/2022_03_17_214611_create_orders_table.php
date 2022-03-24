@@ -17,8 +17,8 @@ return new class extends Migration
             $table->bigIncrements('order_id');
             $table->string('order_code')->nullable();
             $table->date('order_date');
-            $table->float('total_amount_wihtout_discount')->comment('preço total sem desconto');
-            $table->float('total_amount_with_discount')->comment(' preço total com desconto');
+            $table->float('total_amount_wihtout_discount')->nullable()->comment('preço total sem desconto');
+            $table->float('total_amount_with_discount')->nullable()->comment(' preço total com desconto');
             $table->boolean('finished');
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

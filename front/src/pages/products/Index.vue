@@ -114,6 +114,7 @@ export default {
     const hover = ref(0);
     const loading = ref(true);
     const auth = computed(() => store.getters["auth/auth"]);
+    const order = computed(() => store.getters["cart/getOrder"]);
 
     onMounted(async () => {
       await productsIndex();
@@ -122,6 +123,7 @@ export default {
         await store.dispatch("cart/index");
       }
 
+        console.log("🚀 ~ file: Index.vue ~ line 118 ~ setup ~ order", order.value);
       loading.value = false;
     });
 

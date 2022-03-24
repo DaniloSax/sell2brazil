@@ -25,7 +25,7 @@ Route::post('login', [LoginController::class, 'authenticate'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 Route::get('auth', [LoginController::class, 'auth'])->middleware('auth:sanctum')->name('auth');
 
-Route::apiResource('products', ProductController::class)->only('index');
+Route::apiResource('products', ProductController::class)->only('index', 'delete');
+Route::post('detache-product/{product}', [OrderController::class, 'detacheProduct'])->middleware('auth:sanctum');
 
-Route::apiResource('orders', OrderController::class);
-// ->middleware('auth:sanctum')
+Route::apiResource('orders', OrderController::class)->middleware('auth:sanctum');
