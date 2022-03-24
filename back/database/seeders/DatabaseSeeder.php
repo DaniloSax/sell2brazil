@@ -49,12 +49,12 @@ class DatabaseSeeder extends Seeder
                 'created_by' => $user->id,
                 'updated_by' => $user->id
             ])
-            ->hasAttached(
-                $products,
-                fn () => [
-                    'user_id' => User::all()->random()->first()->id,
-                ],
-            )
+            // ->hasAttached(
+            //     $products,
+            //     fn () => [
+            //         'user_id' => User::all()->random()->first()->id,
+            //     ],
+            // )
             ->create();
     }
 }

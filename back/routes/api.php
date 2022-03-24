@@ -3,7 +3,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,3 +29,4 @@ Route::apiResource('products', ProductController::class)->only('index', 'delete'
 Route::post('detache-product/{product}', [OrderController::class, 'detacheProduct'])->middleware('auth:sanctum');
 
 Route::apiResource('orders', OrderController::class)->middleware('auth:sanctum');
+Route::apiResource('purchases', PurchaseController::class)->only('index')->middleware('auth:sanctum');

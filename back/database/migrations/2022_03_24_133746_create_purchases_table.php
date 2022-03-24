@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
             $table->string('order_code');
             $table->date('order_date');
             $table->float('total_amount_wihtout_discount')->comment('preço total sem desconto');
@@ -23,6 +24,8 @@ return new class extends Migration
             $table->json('products');
 
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

@@ -19,7 +19,7 @@ const routes = [
       {
         path: "/my-requests",
         name: "requests",
-        component: () => import("pages/my_requests/Index.vue"),
+        component: () => import("pages/purchase/Index.vue"),
       },
     ],
   },

@@ -16,11 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         if (Auth::check()) {
@@ -37,12 +33,7 @@ class OrderController extends Controller
         return response(null, Response::HTTP_UNAUTHORIZED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $order = Order::firstOrCreate(['finished' => false], ['order_date' => date('Y-m-d')]);
@@ -64,36 +55,26 @@ class OrderController extends Controller
         return response()->json($order, Response::HTTP_OK);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Order $order)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Order $order)
     {
         $order->finished = true;
         $order->save();
 
         Purchase::create([
+            'user_id' => Auth::id(),
             'order_code' => $order->order_code,
             'order_date' => $order->order_date,
             'total_amount_wihtout_discount' => $order->total_amount_wihtout_discount,
             'total_amount_with_discount' => $order->total_amount_with_discount,
             'finished' => $order->finished,
-            'products' => $order->products
+            'products' => ProductResource::collection($order->products->unique('article_code'))
         ]);
 
         $order->delete();
@@ -111,12 +92,7 @@ class OrderController extends Controller
         return response(null, Response::HTTP_OK);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Order $order)
     {
         $order->delete();

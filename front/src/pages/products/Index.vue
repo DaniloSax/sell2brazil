@@ -123,7 +123,6 @@ export default {
         await store.dispatch("cart/index");
       }
 
-        console.log("🚀 ~ file: Index.vue ~ line 118 ~ setup ~ order", order.value);
       loading.value = false;
     });
 

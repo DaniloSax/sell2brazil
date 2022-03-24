@@ -16,7 +16,7 @@
     >
       <q-item class="bg-secondary text-white">
         <q-item-section>
-          <q-item-label> COD - {{ order.order_code }} </q-item-label>
+          <q-item-label> COD: {{ order.order_code }} </q-item-label>
         </q-item-section>
 
         <q-item-section>
@@ -33,7 +33,12 @@
         <q-item-section>
           <q-item-label>
             TOTAL COM DESCONTO:
-            {{ $filters.priceBR(order.total_amount_with_discount) }}
+            {{
+              $filters.priceBR(
+                order.total_amount_wihtout_discount -
+                  order.total_amount_with_discount
+              )
+            }}
           </q-item-label>
         </q-item-section>
 
@@ -147,10 +152,6 @@ export default {
     onMounted(async () => {
       loading.value = true;
       orders.value = await (await api.get("orders")).data.orders;
-      console.log(
-        "🚀 ~ file: Index.vue ~ line 143 ~ onMounted ~ orders.value ",
-        orders.value
-      );
       loading.value = false;
     });
 
