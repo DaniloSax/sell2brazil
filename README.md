@@ -25,7 +25,7 @@ Deixei a desejar em alguns quesitos exigidos na descrição do teste enviado. Es
 
 ```sh
 $ composer install
-$ php aritsan key:generate
+$ php artisan key:generate
 ```
 
 <p>
@@ -35,6 +35,7 @@ Configure a conecção com um banco no .env e depois rode os comandos:
 ```ssh
 $ php artisan migrate
 $ php artisan db:seed
+$ php artisan serve
 ```
 
 ## Usuário
@@ -46,6 +47,9 @@ senha: danilo123
 
 # FRONT-END
 
+## Requisitos mínimos
+- Node 14.19.0
+
 <p>
 Fiz o front com QUASAR FRAMEWORK que é baseado em Vue.
 </p>
@@ -54,6 +58,12 @@ Fiz o front com QUASAR FRAMEWORK que é baseado em Vue.
 
 ```ssh
 $ npm i -g @quasar/cli
+```
+
+- Instale as dependências deste projeto:
+
+```ssh
+$ npm i
 ```
 
 <p>
